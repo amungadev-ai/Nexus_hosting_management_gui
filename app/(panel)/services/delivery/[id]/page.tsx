@@ -3,9 +3,11 @@ import { EmptyFamilyView } from "@/components/services/empty-family-view";
 export const dynamicParams = false;
 
 // No delivery instances exist in the dataset (delivery is configured per
-// website; no delivery template ships yet) — zero static pages, honest gate.
+// website; no delivery template ships yet). `output: export` still requires
+// one static param per dynamic route, so it is generated once for this
+// reserved id (the view ignores it) and renders the honest empty state.
 export function generateStaticParams() {
-  return [];
+  return [{ id: "unavailable" }];
 }
 
 export default async function DeliveryPage({ params }: { params: Promise<{ id: string }> }) {

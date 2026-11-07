@@ -5,8 +5,11 @@ import { db } from "@/lib/mock/data";
 /** UX-WEB-011 — Deployment detail (param route). */
 export const dynamicParams = false;
 
-export function generateStaticParams({ params }: { params: { app: string } }) {
-  return webDeployments.filter((d) => d.app_id === params.app).map((d) => ({ deploy: d.id }));
+// With two dynamic segments the leaf's generateStaticParams runs without
+// parent context under `output: export`, so it must enumerate full
+// {app, deploy} pairs itself; filtering by params.app yields [] and fails the build.
+export function generateStaticParams() {
+  return webDeployments.map((d) => ({ app: d.app_id, deploy: d.id }));
 }
 
 export default async function DeploymentDetailPage({

@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-07 — Static-export (Vercel) deploy fixes + router affordances
+
+### Vercel deploy blocker: `output: export` rejected empty `generateStaticParams`
+
+`next build` (static export) failed while `next dev` worked — three param
+routes produced zero static pages:
+
+- `/apps/[app]/deployments/[deploy]` — with two dynamic segments, the leaf's
+  `generateStaticParams` runs without parent context in Next 16, so the
+  per-app filter returned `[]`. It now enumerates full `{app, deploy}` pairs
+  from `webDeployments`.
+- `/services/queue/[id]` and `/services/delivery/[id]` — hardcoded
+  `return []` "honest gates" (no queue/delivery instances exist by design).
+  `output: export` requires at least one static param per dynamic route, so
+  each now generates a single reserved `unavailable` id (same convention as
+  `RESERVED_PAYMENT_IDS`); the page still renders the honest empty state and
+  the view ignores the id.
+
+### Landing/onboarding router: every card now shows an affordance
+
+Click-through testing (headless browser) confirmed all six router entries
+navigate correctly. On the nano profile, however, the three capability-gated
+cards rendered with no affordance at all (no arrow, no hover), so they read
+as static decoration. Gated cards now show a muted "View requirements →"
+affordance plus hover styling; available cards keep "Get started →".
+
 ## 2026-11-07 — Post-overhaul review pass (integration review of 086b9e9)
 
 ### Review verdict on the Batch 01–10 overhaul (commit 086b9e9)

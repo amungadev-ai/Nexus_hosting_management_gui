@@ -140,10 +140,8 @@ export function RouterIntro({ compact }: { compact?: boolean }) {
               type="button"
               onClick={() => router.push(card.href)}
               className={cx(
-                "group rounded-card border bg-surface p-4 text-left transition-colors",
-                unavailable
-                  ? "border-line opacity-90"
-                  : "border-line hover:border-accent hover:shadow-sm"
+                "group rounded-card border border-line bg-surface p-4 text-left transition-colors hover:border-accent hover:shadow-sm",
+                unavailable && "opacity-90"
               )}
             >
               <span
@@ -164,9 +162,14 @@ export function RouterIntro({ compact }: { compact?: boolean }) {
               >
                 {sub}
               </p>
-              {!unavailable && (
+              {!unavailable ? (
                 <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent">
                   Get started
+                  <Icon name="arrow-right" size={13} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              ) : (
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink-2">
+                  View requirements
                   <Icon name="arrow-right" size={13} className="transition-transform group-hover:translate-x-0.5" />
                 </span>
               )}
