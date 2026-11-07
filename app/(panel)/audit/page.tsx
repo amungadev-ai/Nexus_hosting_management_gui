@@ -12,6 +12,7 @@ import { CopyButton } from "@/components/ui/code";
 import { useNow, useToast } from "@/components/providers";
 import { db } from "@/lib/mock/data";
 import { downloadCsv } from "@/lib/api/ops";
+import { formatUtc } from "@/lib/format";
 import type { AuditEvent } from "@/lib/types";
 
 /**
