@@ -1,8 +1,8 @@
 {
   "name": "nexuspanel-gui-prototype",
-  "version": "0.1.0",
+  "version": "1.0.0-rc.3",
   "private": true,
-  "description": "NexusPanel GUI prototype — 184-screen static SPA prototype (Next.js static export, no server), all personas, mock /api/v1 contract per Stage 6",
+  "description": "NexusPanel multi-persona static Next.js GUI prototype \u2014 Batch 10 integrated preview; mock APIs, not production hosting software",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

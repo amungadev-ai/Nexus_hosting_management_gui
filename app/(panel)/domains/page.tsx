@@ -28,9 +28,7 @@ export default function DomainsPage() {
     <Screen
       id="UX-DNS-001"
       actions={
-        <ButtonLink href="/domains/new" icon="plus">
-          Add domain
-        </ButtonLink>
+        <><ButtonLink href="/domains/setup" variant="secondary" icon="globe">Guided domain setup</ButtonLink><ButtonLink href="/domains/new" icon="plus">Add domain</ButtonLink></>
       }
     >
       {domains === null ? (

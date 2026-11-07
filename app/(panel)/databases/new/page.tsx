@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { databaseHref } from "@/lib/database-routes";
 import { Screen } from "@/components/common/screen";
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/feedback";
@@ -59,7 +60,7 @@ export default function CreateDatabasePage() {
         push("success", "Database provisioning submitted", `Operation ${operation.id} — the instance appears when the connection verifies.`);
         setFocusedId(operation.id);
         setTrayOpen(true);
-        router.push(`/databases/${instance.id}`);
+        router.push(databaseHref(instance.id));
       })
       .catch((e: unknown) => {
         setBusy(false);

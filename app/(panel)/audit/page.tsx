@@ -12,13 +12,12 @@ import { CopyButton } from "@/components/ui/code";
 import { useNow, useToast } from "@/components/providers";
 import { db } from "@/lib/mock/data";
 import { downloadCsv } from "@/lib/api/ops";
-import { formatUtc } from "@/lib/format";
 import type { AuditEvent } from "@/lib/types";
 
 /**
  * UX-OPS-016 /audit — immutable audit trail in UTC with the hash chain:
  * each record hashes the previous, tampering breaks the chain. Filters on
- * action/outcome; verify + export are wired.
+ * action/outcome; export is wired. The fixture hashes are abbreviated, so cryptographic verification is unavailable.
  */
 export default function AuditTrailPage() {
   const now = useNow();
@@ -26,25 +25,12 @@ export default function AuditTrailPage() {
   const rows = useFixture(() => db.audit);
   const [action, setAction] = useState("all");
   const [outcome, setOutcome] = useState("all");
-  const [verified, setVerified] = useState<null | { intact: boolean; at: string }>(null);
 
   const actions = useMemo(() => [...new Set((rows ?? []).map((r) => r.action))], [rows]);
   const filtered = useMemo(
     () => (rows ?? []).filter((r) => (action === "all" || r.action === action) && (outcome === "all" || r.outcome === outcome)),
     [rows, action, outcome]
   );
-
-  const verify = () => {
-    const intact = true;
-    setVerified({ intact, at: new Date().toISOString() });
-    push(
-      "success",
-      intact ? "Chain intact" : "Chain broken",
-      intact
-        ? "Every record hashes the previous one — the chain verified end to end."
-        : "A record no longer matches its predecessor — treat the trail as compromised."
-    );
-  };
 
   const exportCsv = () => {
     downloadCsv(
@@ -69,9 +55,6 @@ export default function AuditTrailPage() {
       breadcrumbs={[{ label: "Audit" }]}
       actions={
         <>
-          <Button variant="secondary" icon="shield" onClick={verify}>
-            Verify chain
-          </Button>
           <Button variant="secondary" icon="download" onClick={exportCsv}>
             Export
           </Button>
@@ -79,16 +62,9 @@ export default function AuditTrailPage() {
       }
     >
       <div className="flex flex-col gap-4">
-        <Callout tone="info">
-          Audits render in UTC. Each record hashes the previous — tampering breaks the chain.
-          Records are never deleted; corrections are new records.
+        <Callout tone="info" title="Audit evidence preview — not cryptographically verified">
+          This prototype shows UTC audit events with shortened illustrative hash values. Full hashes and signed server evidence are unavailable, so the UI cannot verify chain integrity. Exporting the rows does not certify their authenticity.
         </Callout>
-        {verified !== null && (
-          <Callout tone={verified.intact ? "success" : "danger"} title={verified.intact ? "Hash chain intact" : "Hash chain broken"}>
-            Verified {formatUtc(verified.at)} — {filtered.length} record{filtered.length === 1 ? "" : "s"} in the
-            current filter participate in the chain.
-          </Callout>
-        )}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Filter by action" htmlFor="audit-action">

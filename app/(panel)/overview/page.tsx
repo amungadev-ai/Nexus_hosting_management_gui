@@ -37,8 +37,8 @@ export default function OverviewPage() {
       breadcrumbs={[{ label: "Home", href: "/" }]}
       actions={
         <>
-          <ButtonLink href="/websites/new" icon="plus">
-            Add website
+          <ButtonLink href="/launch/web" icon="plus">
+            Publish a project
           </ButtonLink>
           <ButtonLink href="/apps/new" variant="secondary" icon="upload">
             Deploy app
@@ -49,7 +49,12 @@ export default function OverviewPage() {
         </>
       }
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-5">
+        <section className="nx-welcome-hero rounded-2xl border border-line bg-surface p-6 sm:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-4"><div><div className="mb-3 inline-flex items-center gap-2 rounded-full bg-success-soft px-3 py-1 text-xs font-semibold text-success"><span className="h-1.5 w-1.5 rounded-full bg-success"/> Workspace ready · Demo</div><h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Your hosting, at a glance.</h2><p className="mt-2 max-w-xl text-sm text-ink-2">Everything you run, one place to manage it. Pick up where you left off or launch something new.</p></div><Link href="/launch/web" className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-accent-ink hover:bg-accent-hover"><Icon name="plus" size={16}/> Create something</Link></div>
+          <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">{[{label:"Websites",value:db.websites.length,icon:"globe" as const,href:"/websites"},{label:"Applications",value:db.applications.length,icon:"cpu" as const,href:"/apps"},{label:"Platform services",value:instances.length,icon:"cloud" as const,href:"/services"},{label:"Domains",value:db.domains.length,icon:"layers" as const,href:"/domains"}].map(metric=><Link href={metric.href} key={metric.label} className="nx-stat-card rounded-xl border border-line bg-canvas p-4 transition hover:border-accent"><div className="flex items-center justify-between text-ink-2"><span className="text-xs">{metric.label}</span><Icon name={metric.icon} size={16}/></div><div className="mt-3 text-3xl font-semibold tabular-nums">{metric.value}</div><span className="mt-1 inline-block text-xs text-accent">Manage →</span></Link>)}</div>
+        </section>
+        <section aria-label="Quick actions" className="grid gap-3 sm:grid-cols-3">{[{label:"Launch a website",detail:"Static, PHP or WordPress",href:"/launch/web",icon:"globe" as const},{label:"Deploy an application",detail:"Node.js, Python and more",href:"/apps/new",icon:"cpu" as const},{label:"Connect a domain",detail:"DNS, HTTPS and routing",href:"/domains/connect",icon:"layers" as const}].map(a=><Link key={a.label} href={a.href} className="nx-quick-action flex items-center gap-3 rounded-xl border border-line bg-surface p-4 transition hover:border-accent hover:shadow-sm"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent"><Icon name={a.icon} size={19}/></span><span className="min-w-0 flex-1"><strong className="block text-sm">{a.label}</strong><span className="text-xs text-ink-2">{a.detail}</span></span><Icon name="arrow-right" size={16} className="text-ink-3"/></Link>)}</section>
         {firstRun && <GettingStartedCard />}
 
         <CapabilityBanner force />

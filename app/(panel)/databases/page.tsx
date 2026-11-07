@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { databaseHref } from "@/lib/database-routes";
 import { Screen } from "@/components/common/screen";
 import { ButtonLink } from "@/components/ui/button";
 import { Callout, EmptyState, SkeletonTable } from "@/components/ui/feedback";
@@ -20,6 +22,7 @@ import { formatMb, formatRelative } from "@/lib/format";
  */
 export default function DatabasesPage() {
   const { profile } = useSession();
+  const router = useRouter();
   const now = useNow();
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<DatabaseListResult | null>(null);
@@ -48,6 +51,16 @@ export default function DatabasesPage() {
         ) : undefined
       }
     >
+      <div className="mb-5 rounded-card border border-line bg-surface p-4 md:p-5">
+        <p className="text-xs font-semibold uppercase tracking-widest text-accent">Data workspace</p>
+        <h2 className="mt-1 text-xl font-semibold text-ink">Databases stay separate from files</h2>
+        <p className="mt-1 text-sm text-ink-2">Manage database instances, users, backups and administration tools here. Return to the file explorer for application source code and uploads.</p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <ButtonLink href="/files" variant="secondary" icon="folder" size="sm">File explorer</ButtonLink>
+          <ButtonLink href="/developer/sftp" variant="secondary" icon="key" size="sm">SFTP access</ButtonLink>
+          <ButtonLink href="/files/operations" variant="secondary" icon="activity" size="sm">File operations</ButtonLink>
+        </div>
+      </div>
       {loading && <SkeletonTable rows={3} cols={5} />}
       {!loading && result !== null && result.meta.capability_unavailable && (
         <div className="flex flex-col gap-4">
@@ -90,7 +103,7 @@ export default function DatabasesPage() {
             rows={result.data}
             rowKey={(d: DatabaseInstance) => d.id}
             onRowClick={(d: DatabaseInstance) => {
-              window.location.assign(`/databases/${d.id}`);
+              router.push(databaseHref(d.id));
             }}
             columns={[
               { key: "display_name", header: "Name", render: (d: DatabaseInstance) => <span className="font-medium">{d.display_name}</span> },

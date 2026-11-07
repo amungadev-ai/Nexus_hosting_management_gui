@@ -60,7 +60,7 @@ export default function TemplatesPage() {
     <Screen
       id="UX-TPL-001"
       breadcrumbs={[{ label: "Templates" }]}
-      actions={<ButtonLink href="/services" variant="secondary">Platform services</ButtonLink>}
+      actions={<><ButtonLink href="/services/setup">Guided setup</ButtonLink><ButtonLink href="/services" variant="secondary">My services</ButtonLink></>}
     >
       <div className="flex flex-col gap-4">
         {dockerBlocked && (

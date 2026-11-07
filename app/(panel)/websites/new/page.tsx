@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import { Screen } from "@/components/common/screen";
 import { LiveMoment } from "@/components/router/live-moment";
 import { PendingState } from "@/components/common/states";
@@ -210,6 +211,7 @@ export default function CreateWebsiteWizardPage() {
                 );
               })}
             </div>
+            {kind === "node" && caps.node.state !== "unavailable" && (<Callout tone="info" title="Building a Node.js application?"><Link href="/apps/new" className="font-medium text-accent underline">Use the dedicated Node.js deployment wizard</Link> for Git source, build and start commands, environment settings and domain guidance. This website wizard remains available for website-oriented setups.</Callout>)}
             {caps.node.state === "unavailable" && (
               <Callout tone="warning" title="Node.js is not available on this VPS" className="mt-4">
                 {caps.node.reason} You can still create static or PHP sites today, and{" "}

@@ -59,6 +59,7 @@ export default function MonitoringPage() {
         </>
       }
     >
+      <div className="mb-4 rounded-xl border border-line bg-surface-2 px-4 py-3 text-sm text-ink-2">Want a guided plan? <a href="/operations/center" className="font-semibold text-accent hover:underline">Open Operations center →</a></div>
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-sm text-ink-2">

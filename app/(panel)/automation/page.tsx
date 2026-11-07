@@ -39,6 +39,7 @@ export default function AutomationPage() {
         </ButtonLink>
       }
     >
+      <div className="mb-4 rounded-xl border border-line bg-surface-2 px-4 py-3 text-sm text-ink-2">Want a guided plan? <a href="/operations/center" className="font-semibold text-accent hover:underline">Open Operations center →</a></div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card title="Scheduled jobs" description="Cron jobs with next/last runs">
           <p className="text-2xl font-semibold text-ink">{jobs?.length ?? "—"}</p>

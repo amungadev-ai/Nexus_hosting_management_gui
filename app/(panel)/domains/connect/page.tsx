@@ -73,6 +73,7 @@ export default function DomainConnectPage() {
         </>
       }
     >
+      <div className="mb-4 rounded-xl border border-line bg-surface-2 p-4"><p className="text-sm font-semibold text-ink">New: connected domain setup</p><p className="mt-1 text-sm text-ink-2">Prefer a step-by-step path from domain to destination, DNS guidance and HTTPS?</p><Link href="/domains/setup" className="mt-2 inline-block text-sm font-semibold text-accent hover:underline">Open guided domain setup →</Link></div>
       <Callout tone="info" title="NexusPanel doesn't host DNS yet — we give you exact records for your registrar">
         Add the records below at your registrar (Kenic panel → DNS management). We poll real resolvers and
         only say your domain is live when every checked resolver agrees — never before.

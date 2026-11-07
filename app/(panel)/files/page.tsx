@@ -26,6 +26,7 @@ import { displayPath, siteById, type FileNode } from "@/lib/mock/files";
 import { db } from "@/lib/mock/data";
 import { cx, formatBytes, formatDateTime, formatRelative, formatGb } from "@/lib/format";
 import { SiteSelect, useContainerized } from "@/components/files/site-scope";
+import { FolderTree } from "@/components/files/folder-tree";
 
 /**
  * UX-FILE-001 — File manager (DS-013): scoped tree, breadcrumbs, permissions
@@ -44,6 +45,9 @@ export default function FileManagerPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [query, setQuery] = useState("");
+  const [selectedName, setSelectedName] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(true);
 
   // dialogs
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -78,6 +82,8 @@ export default function FileManagerPage() {
   const changeSite = useCallback((next: string) => {
     setSiteId(next);
     setParts([]);
+    setSelectedName(null);
+    setQuery("");
   }, []);
 
   const trackOp = useCallback(
@@ -95,7 +101,7 @@ export default function FileManagerPage() {
     return w ? { allocated: w.usage.disk_gb.allocated, current: w.usage.disk_gb.current } : null;
   }, [siteId]);
 
-  const openFolder = (name: string) => setParts((prev) => [...prev, name]);
+  const openFolder = (name: string) => { setParts((prev) => [...prev, name]); setSelectedName(null); setQuery(""); };
   const viewHref = (node: FileNode) => `/files/view?path=${encodeURIComponent([...parts, node.name].join("/"))}&site=${siteId}`;
   const editHref = (node: FileNode) => `/files/edit?path=${encodeURIComponent([...parts, node.name].join("/"))}&site=${siteId}`;
 
@@ -160,6 +166,10 @@ export default function FileManagerPage() {
   ];
 
   const entries = listing?.entries ?? [];
+  const visibleEntries = entries.filter((entry) => entry.name.toLowerCase().includes(query.trim().toLowerCase()));
+  const selected = entries.find((entry) => entry.name === selectedName) ?? null;
+  const selectFolder = (path: string[]) => { setParts(path); setSelectedName(null); setQuery(""); };
+
 
   return (
     <Screen
@@ -177,6 +187,19 @@ export default function FileManagerPage() {
       }
     >
       <div className="flex flex-col gap-4">
+        <div className="rounded-card border border-line bg-surface p-4 md:p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent">Workspace · Batch 04</p>
+              <h2 className="mt-1 text-xl font-semibold text-ink">Your files, one clear workspace</h2>
+              <p className="mt-1 text-sm text-ink-2">Browse a site-scoped tree, find files, inspect details and open the editor without leaving your project context.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <ButtonLink href="/developer/sftp" variant="secondary" size="sm" icon="key">SFTP access</ButtonLink>
+              <ButtonLink href="/databases" variant="secondary" size="sm" icon="database">Databases</ButtonLink>
+            </div>
+          </div>
+        </div>
         <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <SiteSelect value={siteId} onChange={changeSite} />
           {disk !== null && (
@@ -229,40 +252,65 @@ export default function FileManagerPage() {
           ))}
         </nav>
 
-        {loading && <SkeletonTable rows={6} cols={6} />}
-        {!loading && error !== null && <Callout tone="danger" title="Could not list this folder">{error}</Callout>}
-        {!loading && error === null && entries.length === 0 && (
-          <div className="rounded-card border border-line bg-surface">
-            <EmptyState
-              icon="folder"
-              title="This folder is empty"
-              body={
-                parts.length === 0
-                  ? "The site root has no files yet. Upload your first file, or create a folder to organize uploads."
-                  : "Nothing here yet — uploads land here when you target this folder."
-              }
-              action={{ label: "Upload a file", onClick: () => setUploadOpen(true) }}
-              secondaryAction={{ label: "New folder", onClick: () => setMkdirOpen(true) }}
-            />
-          </div>
-        )}
-        {!loading && error === null && entries.length > 0 && (
-          <div className="overflow-hidden rounded-card border border-line bg-surface">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line p-3">
-              <StatusPill status="active" at={listing ? listing.entries[0]?.modified_at : undefined} />
-              <p className="text-xs text-ink-3">
-                {entries.length} entr{entries.length === 1 ? "y" : "ies"} · {displayPath(site ?? fileSitesFallback(), parts, containerized)}
-              </p>
+        <div className="grid min-h-[440px] gap-3 lg:grid-cols-[minmax(180px,0.8fr)_minmax(0,2.4fr)] xl:grid-cols-[minmax(190px,0.75fr)_minmax(0,2fr)_minmax(200px,0.9fr)]">
+          <aside className="min-w-0 rounded-card border border-line bg-surface p-3" aria-label="Site folder tree">
+            <div className="mb-3 flex items-center justify-between border-b border-line pb-3">
+              <h3 className="text-sm font-semibold text-ink">Explorer</h3>
+              <Button variant="ghost" size="sm" icon="refresh" onClick={() => setReloadKey((n) => n + 1)}>Refresh</Button>
             </div>
-            <DataTable
-              columns={columns}
-              rows={entries}
-              rowKey={(r) => r.name}
-              onRowClick={(r) => (r.type === "directory" ? openFolder(r.name) : undefined)}
-              caption={`Files in ${parts.length === 0 ? site?.root_name ?? "root" : parts.join("/")}`}
-            />
-          </div>
-        )}
+            {site && <FolderTree rootName={site.root_name} nodes={site.children} currentPath={parts} onNavigate={selectFolder} />}
+            <p className="mt-4 rounded-lg bg-surface-2 p-2 text-xs text-ink-3">Restricted to the selected website root. Folder navigation cannot escape this scope.</p>
+          </aside>
+          <section className="min-w-0 rounded-card border border-line bg-surface" aria-label="Folder contents">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line p-3">
+              <div>
+                <h3 className="text-sm font-semibold text-ink">{parts.at(-1) ?? site?.root_name ?? "Files"}</h3>
+                <p className="text-xs text-ink-3">{entries.length} items · select a file for details</p>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => setShowDetails((v) => !v)}>{showDetails ? "Hide details" : "Show details"}</Button>
+            </div>
+            <div className="border-b border-line p-3">
+              <label htmlFor="file-search" className="sr-only">Search current folder</label>
+              <Input id="file-search" placeholder="Search files in this folder…" value={query} onChange={(e) => setQuery(e.target.value)} />
+            </div>
+            {loading && <div className="p-3"><SkeletonTable rows={5} cols={4} /></div>}
+            {!loading && error && <div className="p-3"><Callout tone="danger" title="Could not list this folder">{error}</Callout></div>}
+            {!loading && !error && visibleEntries.length === 0 && (
+              <div className="p-6 text-center text-sm text-ink-2">{query ? "No files match your search in this folder." : "This folder is empty. Upload a file or create a folder to get started."}</div>
+            )}
+            {!loading && !error && visibleEntries.length > 0 && (
+              <div className="divide-y divide-line">
+                {visibleEntries.map((entry) => (
+                  <div key={entry.name} className={cx("flex items-center gap-2 px-3 py-2.5 hover:bg-surface-2", selectedName === entry.name && "bg-surface-2")}>
+                    <button type="button" className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={() => { if (entry.type === "directory") openFolder(entry.name); else setSelectedName(entry.name); }} aria-label={entry.type === "directory" ? `Open folder ${entry.name}` : `Select file ${entry.name}`}>
+                      <Icon name={entry.type === "directory" ? "folder" : "file-text"} size={17} className="shrink-0 text-accent" />
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">{entry.name}</span>
+                      <span className="hidden text-xs text-ink-3 sm:inline">{entry.type === "directory" ? "Folder" : formatBytes(entry.size_bytes ?? 0)}</span>
+                    </button>
+                    {entry.type === "file" ? <ButtonLink href={editHref(entry)} variant="ghost" size="sm" icon="edit">Edit</ButtonLink> : <Button variant="ghost" size="sm" onClick={() => openFolder(entry.name)} icon="chevron-right">Open</Button>}
+                    <Button variant="ghost" size="sm" onClick={() => setSelectedName(entry.name)} icon="more-horizontal" aria-label={`Show details for ${entry.name}`} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+          {showDetails && (
+            <aside className="min-w-0 rounded-card border border-line bg-surface p-4 lg:col-span-2 xl:col-span-1" aria-label="Selected file details">
+              <h3 className="border-b border-line pb-3 text-sm font-semibold text-ink">Details & actions</h3>
+              {selected ? (
+                <div className="mt-4 flex flex-col gap-3">
+                  <div className="flex items-center gap-2"><Icon name={selected.type === "directory" ? "folder" : "file"} size={22} className="text-accent" /><span className="break-all text-sm font-semibold text-ink">{selected.name}</span></div>
+                  <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-xs"><dt className="text-ink-3">Type</dt><dd>{selected.type === "directory" ? "Folder" : selected.mime ?? "File"}</dd><dt className="text-ink-3">Size</dt><dd>{selected.size_bytes === null ? "—" : formatBytes(selected.size_bytes)}</dd><dt className="text-ink-3">Mode</dt><dd className="font-mono">{selected.mode}</dd><dt className="text-ink-3">Owner</dt><dd>{selected.owner}</dd><dt className="text-ink-3">Version</dt><dd>{selected.version ?? "—"}</dd></dl>
+                  {selected.type === "file" && selected.content !== undefined && <pre className="max-h-40 overflow-auto rounded-lg bg-surface-2 p-3 text-xs text-ink-2">{selected.content.slice(0, 550)}</pre>}
+                  {selected.type === "file" && <><ButtonLink href={viewHref(selected)} variant="secondary" size="sm" icon="eye">Preview file</ButtonLink><ButtonLink href={editHref(selected)} size="sm" icon="edit">Open code editor</ButtonLink></>}
+                  {selected.type === "directory" && <Button size="sm" onClick={() => openFolder(selected.name)} icon="folder">Open folder</Button>}
+                  <Button variant="secondary" size="sm" onClick={() => setRenameTarget(selected)} icon="edit">Rename</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setDeleteTarget(selected)} icon="trash" className="text-danger">Delete…</Button>
+                </div>
+              ) : <p className="mt-4 text-sm text-ink-3">Select a file or use the details button on a folder to see metadata and available actions.</p>}
+            </aside>
+          )}
+        </div>
       </div>
 
       {site !== undefined && (

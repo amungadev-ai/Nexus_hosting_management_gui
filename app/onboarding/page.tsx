@@ -1,48 +1,6 @@
 "use client";
-
 import Link from "next/link";
-import { RouterIntro } from "@/app/page";
-import { BareLayout } from "@/components/iam/bare-layout";
-import { Card } from "@/components/ui/card";
-import { Stepper } from "@/components/ui/nav";
-import { Icon } from "@/components/ui/icons";
-
-/**
- * UX-IAM-003 — First-run router (bare screen). FLOW-013 entry: the six-card
- * "What do you want to run?" router, reused verbatim from the landing
- * (app/page.tsx exports RouterIntro), framed by the three-step onboarding
- * stepper. The router is context-free — it appears before any organization
- * context exists — so this screen is deliberately outside the panel shell.
- */
-export default function OnboardingPage() {
-  return (
-    <BareLayout screenId="UX-IAM-003" width="wide">
-      <div className="flex flex-col gap-5">
-        <Stepper
-          steps={["1. What do you want to run", "2. Connect your domain", "3. You're live"]}
-          current={0}
-        />
-
-        <RouterIntro />
-
-        <Card className="border-dashed">
-          <div className="flex flex-col gap-2">
-            <p className="text-sm text-ink-2">
-              <Icon name="info" size={14} className="mr-1.5 inline text-info" />
-              The router appears before any organization context exists — there is nothing to
-              scope to yet. After your first path completes you land on the service portfolio
-              with a short follow-up checklist (first site live, connect a domain, enable
-              backups, invite a collaborator).
-            </p>
-            <p className="text-sm">
-              <Link href="/overview" className="font-medium text-accent hover:underline">
-                Skip — show me the portfolio
-                <Icon name="arrow-right" size={13} className="ml-1 inline" />
-              </Link>
-            </p>
-          </div>
-        </Card>
-      </div>
-    </BareLayout>
-  );
-}
+import {RouterIntro} from "@/app/page";
+import {useSession} from "@/components/providers";
+import {Icon} from "@/components/ui/icons";
+export default function OnboardingPage(){const {setFirstRun}=useSession();return <main className="min-h-dvh bg-canvas"><header className="border-b border-line bg-surface"><div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5"><Link href="/overview" className="flex items-center gap-3 text-lg font-bold"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white"><Icon name="layers" size={19}/></span>NexusPanel</Link><Link href="/overview" onClick={()=>setFirstRun(false)} className="text-sm text-ink-2 hover:text-accent">Skip to workspace →</Link></div></header><div className="mx-auto max-w-6xl px-5 py-10"><div className="mb-8 flex items-center gap-2 text-xs font-semibold text-ink-2"><span className="rounded-full bg-accent px-3 py-1 text-white">01 · Choose</span><span className="mx-1 h-px w-8 bg-line"/><span>02 · Configure</span><span className="mx-1 h-px w-8 bg-line"/><span>03 · Go live</span></div><div className="nx-onboard-hero mb-8 rounded-3xl border border-line bg-surface p-6 sm:p-8"><div className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent"><Icon name="zap" size={14}/> Guided setup</div><h1 className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">From idea to live service, without the guesswork.</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-ink-2">Tell NexusPanel what you want to launch. We’ll guide you through the right configuration, connect your domain, and show each deployment step.</p></div><div className="nx-router-panel rounded-3xl border border-line bg-surface p-5 sm:p-8"><RouterIntro/></div><div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-ink-2"><span><Icon name="shield" size={14} className="mr-1 inline"/> Resource compatibility is checked before provisioning.</span><Link href="/overview/capabilities" className="font-semibold text-accent">Inspect server capabilities →</Link></div></div></main>}

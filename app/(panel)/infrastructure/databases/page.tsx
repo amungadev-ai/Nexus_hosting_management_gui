@@ -1,4 +1,5 @@
 "use client";
+import { databaseHref } from "@/lib/database-routes";
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -130,7 +131,7 @@ export default function DatabaseServiceSettingsPage() {
             rows={instances}
             rowKey={(d: DatabaseInstance) => d.id}
             columns={[
-              { key: "display_name", header: "Instance", render: (d: DatabaseInstance) => <Link href={`/databases/${d.id}`} className="font-medium text-accent hover:underline">{d.display_name}</Link> },
+              { key: "display_name", header: "Instance", render: (d: DatabaseInstance) => <Link href={databaseHref(d.id)} className="font-medium text-accent hover:underline">{d.display_name}</Link> },
               { key: "engine", header: "Engine", render: (d: DatabaseInstance) => `${d.engine === "mariadb" ? "MariaDB" : "PostgreSQL"} ${d.engine_version}` },
               { key: "state", header: "State", render: (d: DatabaseInstance) => <Chip tone={d.state === "running" ? "success" : d.state === "degraded" ? "warning" : "info"}>{d.state}</Chip> },
               { key: "ram_ceiling_mb", header: "memory.max", render: (d: DatabaseInstance) => formatMb(d.ram_ceiling_mb) },

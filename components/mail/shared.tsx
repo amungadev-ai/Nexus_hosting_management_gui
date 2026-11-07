@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCapability } from "@/components/providers";
 import { withLatency } from "@/lib/api/core";
 import { UnavailableState } from "@/components/common/states";
@@ -10,10 +12,22 @@ import { StatusPill, type StatusPillStatus } from "@/components/ui/badge";
 /** Per-screen capability gate (mail.external_smtp | mail.mailboxes). */
 export function MailGate({ capabilityKey, children }: { capabilityKey: string; children: React.ReactNode }) {
   const cap = useCapability(capabilityKey);
-  if (cap.state === "unavailable") {
-    return <UnavailableState capabilityKey={capabilityKey} />;
-  }
-  return <>{children}</>;
+  return <><EmailToolsNav />{cap.state === "unavailable" ? <UnavailableState capabilityKey={capabilityKey} /> : children}</>;
+}
+
+/** Contextual module navigation: preserves distinct tools without exposing every screen in the global sidebar. */
+export function EmailToolsNav() {
+  const pathname = usePathname();
+  const links = [
+    ["Workspace", "/email"], ["Guided setup", "/email/setup"],
+    ["SMTP", "/email/external-smtp"], ["Domains", "/email/domains"],
+    ["Mailboxes", "/email/mailboxes"], ["Forwarders", "/email/aliases"],
+    ["Deliverability", "/email/deliverability"], ["Queue", "/email/queue"],
+  ];
+  return <nav aria-label="Email tools" className="mb-5 flex flex-wrap gap-1.5 rounded-xl border border-line bg-surface p-2">
+    {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined}
+      className={`rounded-lg px-3 py-2 text-xs transition ${pathname === href ? "bg-accent-soft font-semibold text-accent" : "text-ink-2 hover:bg-surface-2 hover:text-ink"}`}>{label}</Link>)}
+  </nav>;
 }
 
 /** Simulated fixture fetch — honest loading state for list screens. */

@@ -155,3 +155,15 @@ body {
   background: var(--nx-line-strong);
   border-radius: 8px;
 }
+
+/* Batch 01: visual foundation, built on existing theme tokens */
+.nx-auth-visual{background:radial-gradient(circle at 75% 30%,#3249aa 0%,transparent 35%),linear-gradient(145deg,#101c48 0%,#111a37 55%,#0a1129 100%)}
+.nx-auth-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,transparent,black)}
+.nx-auth-input{box-shadow:0 1px 2px rgba(20,32,64,.025);transition:border-color .18s,box-shadow .18s}
+.nx-auth-input:focus{box-shadow:0 0 0 4px var(--nx-accent-soft)}
+.nx-nav-link:hover,.nx-quick-action:hover,.nx-stat-card:hover{transform:translateY(-1px)}
+.nx-sidebar{box-shadow:1px 0 0 rgba(0,0,0,.02)}
+.nx-welcome-hero{background:linear-gradient(115deg,var(--nx-surface) 55%,var(--nx-accent-soft) 150%)}
+.nx-onboard-hero{background:radial-gradient(circle at 92% 0%,var(--nx-accent-soft),transparent 38%),var(--nx-surface)}
+.nx-legacy-nav nav{width:100%;min-width:0;border:0}.nx-legacy-nav nav>div:first-child{display:none}
+@media(prefers-reduced-motion:reduce){.nx-nav-link,.nx-quick-action,.nx-stat-card{transition:none!important;transform:none!important}}

@@ -32,6 +32,9 @@ export default function SftpPage() {
       actions={<Button variant="secondary" icon="refresh" onClick={() => setResetOpen(true)}>Reset password</Button>}
     >
       <div className="flex flex-col gap-4">
+        <Callout tone="info" title="Transfer files without leaving your site scope">
+          SFTP is the recommended transfer method for large uploads. Use the same website selection as the file explorer; credentials shown here are simulated for this prototype. <a href="/files" className="font-medium text-accent underline">Return to explorer</a>.
+        </Callout>
         <SiteSelect value={siteId} onChange={setSiteId} label="Website credentials" />
         <Card title="Connection details">
           <div className="flex flex-col gap-4">

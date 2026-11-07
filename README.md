@@ -1,3 +1,35 @@
+# NexusPanel GUI Prototype — Batch 10 (v1.0.0-rc.2)
+
+**Prototype only:** UI with simulated data; not a production hosting control panel.
+
+Start with `/workspace/finish` to explore the new AI, audit, support and settings integration. Run `npm install`, `npm run dev` for development, or `npm run build` to produce the static export after dependencies are installed.
+
+See [BATCH_10_CHANGELOG.md](BATCH_10_CHANGELOG.md) for validation evidence, limitations and production readiness gaps.
+
+# NexusPanel GUI — Batch 09 (v1.0.0-rc.1)
+
+Start at `/infrastructure/center` to try the new guided infrastructure workflows. See `BATCH_09_CHANGELOG.md` for scope and limitations.
+
+# NexusPanel GUI Prototype — Batch 08 (v0.9)
+
+Run `npm install` and `npm run dev`; sign in and open `/commercial/center` from the Business sidebar. Use the persona selector to preview role-specific journeys. See [BATCH_08_CHANGELOG.md](BATCH_08_CHANGELOG.md).
+
+# NexusPanel GUI Prototype — Batch 07 (v0.8)
+
+Run `npm install && npm run dev`, then sign in at `/auth/sign-in` and open **Operations center** in the sidebar (`/operations/center`). All previous prototype routes remain included.
+
+Read [BATCH_07_CHANGELOG.md](BATCH_07_CHANGELOG.md) for changes and validation limitations.
+
+# Batch 06 — Platform Services & Self-hosted Templates
+
+Start with `/services` or `/services/setup` for the new task-first flow. See [BATCH_06_CHANGELOG.md](BATCH_06_CHANGELOG.md) for implementation and validation details.
+
+# Batch 04 — File Explorer & Data Workspace
+
+See [BATCH_04_CHANGELOG.md](BATCH_04_CHANGELOG.md) for the implemented changes, validation, and limitations.
+
+> **Batch 03 (v0.4):** Guided domain setup now available at `/domains/setup`; see `BATCH_03_CHANGELOG.md`.
+
 # NexusPanel — GUI Prototype
 
 A **static, server-free** prototype of the NexusPanel hosting control panel, built

@@ -45,7 +45,8 @@ export default function ServicesPage() {
       breadcrumbs={[{ label: "Platform services" }]}
       actions={
         <>
-          <ButtonLink href="/services/storage/new" icon="plus">
+          <ButtonLink href="/services/setup" icon="plus">Guided setup</ButtonLink>
+          <ButtonLink href="/services/storage/new" variant="secondary" icon="plus">
             New bucket
           </ButtonLink>
           <ButtonLink href="/templates" variant="secondary" icon="box">
@@ -55,6 +56,7 @@ export default function ServicesPage() {
       }
     >
       <div className="flex flex-col gap-4">
+        <div className="rounded-xl border border-line bg-surface-2 p-5 sm:p-6"><p className="text-xs font-semibold uppercase tracking-wide text-accent">A simpler way to get started</p><h2 className="mt-2 text-lg font-semibold">What would you like to run?</h2><p className="mt-1 max-w-2xl text-sm text-ink-2">Set up storage, optimize images, improve performance or install a self-hosted app. NexusPanel guides you through compatibility checks before you deploy.</p><div className="mt-4 flex flex-wrap gap-2"><ButtonLink href="/services/setup" icon="arrow-right">Start guided setup</ButtonLink><ButtonLink href="/templates" variant="secondary">Explore catalog</ButtonLink></div></div>
         {storage.state === "unavailable" && <UnavailableState capabilityKey="service.storage" />}
 
         {CATEGORY_ORDER.map((cat) => {

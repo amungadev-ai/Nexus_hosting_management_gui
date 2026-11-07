@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { databaseHref } from "@/lib/database-routes";
 import { Screen } from "@/components/common/screen";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -80,7 +81,7 @@ function DbShell({
           {tabs.map((t) => (
             <Link
               key={t.id}
-              href={`/databases/${record.id}${t.id === "" ? "" : `/${t.id}`}`}
+              href={databaseHref(record.id, t.id)}
               aria-current={active === t.id ? "page" : undefined}
               className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm ${active === t.id ? "border-accent font-medium text-accent" : "border-transparent text-ink-2 hover:text-ink"}`}
             >
@@ -162,11 +163,11 @@ export function DatabaseDetailView({ dbId }: { dbId: string }) {
             >
               Back up now
             </Button>
-            <ButtonLink href={`/databases/${record.id}/backups`} variant="secondary">Backups & restore</ButtonLink>
+            <ButtonLink href={databaseHref(record.id, "backups")} variant="secondary">Backups & restore</ButtonLink>
           </div>
         </Card>
       </div>
-      <Card title="Users" actions={<ButtonLink href={`/databases/${record.id}/users`} variant="secondary" size="sm">Manage users</ButtonLink>}>
+      <Card title="Users" actions={<ButtonLink href={databaseHref(record.id, "users")} variant="secondary" size="sm">Manage users</ButtonLink>}>
         <DataTable
           caption="Database users"
           rows={record.users}
@@ -396,7 +397,7 @@ export function DatabaseAdminView({ dbId }: { dbId: string }) {
         />
         <div className="mt-4 flex flex-wrap gap-2">
           <ButtonLink href={tool.href} icon="external-link">Open {tool.label} template</ButtonLink>
-          <ButtonLink href={`/databases/${record.id}/transfers`} variant="secondary">Import / export instead</ButtonLink>
+          <ButtonLink href={databaseHref(record.id, "transfers")} variant="secondary">Import / export instead</ButtonLink>
         </div>
       </Card>
       <Callout tone="warning" title="Admin tools are powerful">

@@ -37,6 +37,7 @@ export default function SecurityPage() {
         </ButtonLink>
       }
     >
+      <div className="mb-4 rounded-xl border border-line bg-surface-2 px-4 py-3 text-sm text-ink-2">Want a guided plan? <a href="/operations/center" className="font-semibold text-accent hover:underline">Open Operations center →</a></div>
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <Card title="Firewall" description={`${5} rules · default-deny inbound`}>
