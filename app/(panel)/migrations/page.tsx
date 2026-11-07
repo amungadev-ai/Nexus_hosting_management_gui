@@ -13,6 +13,7 @@ import { Chip } from "@/components/ui/badge";
 import { DataTable } from "@/components/ui/table";
 import { Callout, EmptyState, SkeletonTable } from "@/components/ui/feedback";
 import { MigrationStatePill, useFixture } from "@/components/support/shared";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-SUP-002 /migrations — migration hub. The three fixture migrations cover
@@ -74,7 +75,7 @@ export default function MigrationHubPage() {
               if (m.conflicts > 0) {
                 router.push(`/migrations/${m.id}/conflicts`);
               } else if (m.operation_id !== undefined) {
-                router.push(`/activity/jobs/${m.operation_id}`);
+                router.push(jobHref(m.operation_id));
               }
             }}
             columns={[

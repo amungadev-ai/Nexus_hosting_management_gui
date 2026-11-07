@@ -14,6 +14,7 @@ import { EmptyState } from "@/components/ui/feedback";
 import { SegmentedControl } from "@/components/ui/nav";
 import { Icon } from "@/components/ui/icons";
 import { formatRelative } from "@/lib/format";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-OV-004 — Activity and jobs: the unified operation stream (seeded
@@ -78,7 +79,7 @@ export default function ActivityPage() {
           <ul className="flex list-none flex-col divide-y divide-line overflow-hidden rounded-card border border-line bg-surface p-0">
             {filtered.map((op) => (
               <li key={op.id} className="relative">
-                <Link href={`/activity/jobs/${op.id}`} className="flex items-center gap-3 px-4 py-3 pr-4 transition-colors hover:bg-surface-2 max-md:flex-wrap">
+                <Link href={jobHref(op.id)} className="flex items-center gap-3 px-4 py-3 pr-4 transition-colors hover:bg-surface-2 max-md:flex-wrap">
                   <StatusPill status={OP_PILL[op.status]} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium text-ink">{op.title}</span>

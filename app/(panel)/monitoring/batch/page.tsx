@@ -11,6 +11,7 @@ import { useOperationStream, useToast } from "@/components/providers";
 import { operations } from "@/lib/operations";
 import { isTerminal } from "@/lib/operations";
 import type { Operation } from "@/lib/types";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-OPS-019 /monitoring/batch — THE batch queue page (DS-023 full contract):
@@ -80,7 +81,7 @@ export default function BatchQueuePage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <StatusPill status="queued" />
-                      <ButtonLink href={`/activity/jobs/${op.id}`} variant="ghost" size="sm">
+                      <ButtonLink href={jobHref(op.id)} variant="ghost" size="sm">
                         Inspect
                       </ButtonLink>
                       <button
@@ -141,7 +142,7 @@ export default function BatchQueuePage() {
                               : "cancelled"
                       }
                     />
-                    <ButtonLink href={`/activity/jobs/${op.id}`} variant="ghost" size="sm">
+                    <ButtonLink href={jobHref(op.id)} variant="ghost" size="sm">
                       Inspect
                     </ButtonLink>
                   </div>

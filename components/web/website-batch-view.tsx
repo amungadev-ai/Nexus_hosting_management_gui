@@ -13,6 +13,7 @@ import { cancelBatchOperation } from "@/lib/api/web";
 import { db } from "@/lib/mock/data";
 import { isTerminal } from "@/lib/operations";
 import { formatRelative } from "@/lib/format";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-WEB-020 — Batch jobs for site: builds, backups and transforms queued by
@@ -107,7 +108,7 @@ export function WebsiteBatchView({ siteId }: { siteId: string }) {
                     {op.batch !== undefined && op.batch.queue_position !== undefined && <Chip tone="info">queue position {op.batch.queue_position}</Chip>}
                     {op.batch?.low_priority === true && !terminal && <Chip tone="neutral">low priority</Chip>}
                     {op.batch?.yielded === true && <Chip tone="warning">yielded to site traffic</Chip>}
-                    <Link href={`/activity/jobs/${op.id}`} className="text-sm font-medium text-accent hover:underline">
+                    <Link href={jobHref(op.id)} className="text-sm font-medium text-accent hover:underline">
                       Inspect
                     </Link>
                     {!terminal && (

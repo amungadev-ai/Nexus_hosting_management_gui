@@ -8,6 +8,7 @@ import { useOperationStream } from "@/components/providers";
 import { StatusPill, type StatusPillStatus } from "@/components/ui/badge";
 import { SkeletonTable } from "@/components/ui/feedback";
 import { Sparkline } from "@/components/ui/misc";
+import { jobHref } from "@/lib/job-routes";
 
 /** Web-module shared view helpers (loading pattern, mini usage, job links). */
 
@@ -62,7 +63,7 @@ const OPERATION_PILL: Record<string, StatusPillStatus> = {
   needs_attention: "awaiting_approval",
 };
 
-/** Links an operation to the durable job detail (/activity/jobs/:job). */
+/** Links an operation to the durable job detail (/activity/jobs?op=:op). */
 export function JobLink({ operationId, className }: { operationId: string; className?: string }) {
   const { list } = useOperationStream();
   const op: Operation | undefined = list.find((o) => o.id === operationId);
@@ -71,12 +72,12 @@ export function JobLink({ operationId, className }: { operationId: string; class
       {op !== undefined ? (
         <>
           <StatusPill status={OPERATION_PILL[op.status] ?? "unknown"} />
-          <Link href={`/activity/jobs/${op.id}`} className="min-w-0 truncate font-mono text-xs text-accent hover:underline">
+          <Link href={jobHref(op.id)} className="min-w-0 truncate font-mono text-xs text-accent hover:underline">
             {op.id}
           </Link>
         </>
       ) : (
-        <Link href={`/activity/jobs/${operationId}`} className="min-w-0 truncate font-mono text-xs text-accent hover:underline">
+        <Link href={jobHref(operationId)} className="min-w-0 truncate font-mono text-xs text-accent hover:underline">
           {operationId}
         </Link>
       )}

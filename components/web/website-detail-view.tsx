@@ -18,6 +18,7 @@ import { JobLink, KindChip } from "@/components/web/web-bits";
 import { deleteWebsite, deployWebsiteNow } from "@/lib/api/web";
 import { db } from "@/lib/mock/data";
 import { formatDateTime, formatRelative } from "@/lib/format";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-WEB-003 — Website overview: observed health, URLs, resource usage and
@@ -159,7 +160,7 @@ export function WebsiteDetailView({ siteId }: { siteId: string }) {
                 {recentJobs.map((op) => (
                   <li key={op.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-2 last:border-b-0">
                     <span className="min-w-0 text-sm text-ink">
-                      <Link href={`/activity/jobs/${op.id}`} className="font-medium text-accent hover:underline">
+                      <Link href={jobHref(op.id)} className="font-medium text-accent hover:underline">
                         {op.title}
                       </Link>
                       <span className="ml-2 text-xs text-ink-3">{formatRelative(op.created_at)}</span>
@@ -190,7 +191,7 @@ export function WebsiteDetailView({ siteId }: { siteId: string }) {
                   .map((op) => (
                     <li key={op.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-2 last:border-b-0">
                       <span className="min-w-0 text-sm">
-                        <Link href={`/activity/jobs/${op.id}`} className="font-medium text-accent hover:underline">
+                        <Link href={jobHref(op.id)} className="font-medium text-accent hover:underline">
                           {op.title}
                         </Link>
                         <span className="block text-xs text-ink-3">

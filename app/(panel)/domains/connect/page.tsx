@@ -16,6 +16,7 @@ import { checkDnsPropagation } from "@/lib/api/dns";
 import { dnsGuidance } from "@/lib/mock/dns";
 import { db } from "@/lib/mock/data";
 import { isTerminal } from "@/lib/operations";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-WEB-018 — Domain connection wizard (the lay-person killer feature):
@@ -122,7 +123,7 @@ export default function DomainConnectPage() {
           )}
           {lastCheck !== undefined && (
             <p className="mt-3 text-xs text-ink-3">
-              Last verified check: <Link href={`/activity/jobs/${lastCheck.id}`} className="text-accent hover:underline">{lastCheck.id}</Link>
+              Last verified check: <Link href={jobHref(lastCheck.id)} className="text-accent hover:underline">{lastCheck.id}</Link>
             </p>
           )}
         </Card>

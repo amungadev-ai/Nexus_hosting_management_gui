@@ -12,6 +12,7 @@ import { useNow, useOperationStream } from "@/components/providers";
 import { connectedIntegrations, scheduledJobs, webhookDeliveries, webhookEndpoints } from "@/lib/mock/automation";
 import { isTerminal } from "@/lib/operations";
 import { formatRelative } from "@/lib/format";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-AUTO-001 /automation — Automation overview: jobs, triggers, rules and
@@ -121,7 +122,7 @@ export default function AutomationPage() {
                   <StatusPill
                     status={op.status === "succeeded" ? "succeeded" : isTerminal(op.status) ? "failed" : op.status === "queued" ? "queued" : "running"}
                   />
-                  <Link href={`/activity/jobs/${op.id}`} className="text-xs text-accent hover:underline">
+                  <Link href={jobHref(op.id)} className="text-xs text-accent hover:underline">
                     Inspect
                   </Link>
                 </div>

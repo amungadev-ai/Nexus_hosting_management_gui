@@ -17,6 +17,7 @@ import { deploymentsForApp } from "@/lib/mock/web";
 import { webProcesses } from "@/lib/mock/web";
 import { db } from "@/lib/mock/data";
 import { formatMb } from "@/lib/format";
+import { jobHref } from "@/lib/job-routes";
 
 /**
  * UX-WEB-009 — Application overview: URL, build, runtime, process and recent
@@ -179,7 +180,7 @@ export function AppDetailView({ appId }: { appId: string }) {
               {appOps.map((op) => (
                 <li key={op.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-2 last:border-b-0">
                   <span className="min-w-0 text-sm">
-                    <Link href={`/activity/jobs/${op.id}`} className="font-medium text-accent hover:underline">{op.title}</Link>
+                    <Link href={jobHref(op.id)} className="font-medium text-accent hover:underline">{op.title}</Link>
                   </span>
                   <JobLink operationId={op.id} />
                 </li>
