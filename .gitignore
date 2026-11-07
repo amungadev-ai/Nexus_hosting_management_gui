@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+
+# env — the prototype uses no env vars and no secrets; keep it that way
+.env*
+
+# prototype build inputs (spec extractions) stay out of the shipped repo
+# but the scripts folder itself is committed

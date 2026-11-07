@@ -1,0 +1,29 @@
+{
+  "name": "nexuspanel-gui-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NexusPanel GUI prototype — 184-screen static SPA prototype (Next.js static export, no server), all personas, mock /api/v1 contract per Stage 6",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "npx serve out",
+    "lint": "eslint .",
+    "check:screens": "node scripts/check-screens.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9.14.0",
+    "eslint-config-next": "16.4.5",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^5"
+  }
+}

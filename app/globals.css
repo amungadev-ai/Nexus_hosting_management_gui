@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/* Class-based dark mode (theme is user-selectable: light / dark / system) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+ * Design tokens — NexusPanel Stage 3 §4.2 "proposed starting palette".
+ * Light values are the spec's; .dark overrides are the spec's exact dark
+ * column. Derived tints (hover/active, info) are PROPOSED, derived from the
+ * spec palette. Do not introduce colors outside these tokens.
+ * ------------------------------------------------------------------------- */
+:root {
+  --nx-canvas: #f7f9fc; /* color.canvas  */
+  --nx-surface: #ffffff; /* color.surface */
+  --nx-surface-2: #f1f4fa; /* PROPOSED: layered surface / table header / sidebar */
+  --nx-ink: #172033; /* color.text.primary   */
+  --nx-ink-2: #526079; /* color.text.secondary */
+  --nx-ink-3: #8791a5; /* PROPOSED: placeholders, timestamps */
+  --nx-accent: #465cf5; /* color.accent  */
+  --nx-accent-hover: #3a4fe0; /* PROPOSED */
+  --nx-accent-soft: #e8ebfe; /* PROPOSED: selected rows, active nav */
+  --nx-accent-ink: #ffffff; /* PROPOSED: text on accent */
+  --nx-info: #2563a8; /* PROPOSED: informational (never use danger for info) */
+  --nx-info-soft: #e3edf8; /* PROPOSED */
+  --nx-success: #177a53; /* color.success */
+  --nx-success-soft: #e0f2ea; /* PROPOSED */
+  --nx-warning: #946200; /* color.warning */
+  --nx-warning-soft: #f8ecd4; /* PROPOSED */
+  --nx-danger: #c23545; /* color.danger — reserved for risk and failure */
+  --nx-danger-soft: #fae4e7; /* PROPOSED */
+  --nx-line: #dde4ee; /* color.border */
+  --nx-line-strong: #c3cede; /* PROPOSED: focused/hovered borders */
+}
+
+.dark {
+  --nx-canvas: #0b1020;
+  --nx-surface: #121a2b;
+  --nx-surface-2: #0e1526;
+  --nx-ink: #f3f6fc;
+  --nx-ink-2: #b0bcd0;
+  --nx-ink-3: #74839e;
+  --nx-accent: #8794ff;
+  --nx-accent-hover: #9ca7ff;
+  --nx-accent-soft: #232c4d;
+  --nx-accent-ink: #0b1020;
+  --nx-info: #7fb3e8;
+  --nx-info-soft: #16263c;
+  --nx-success: #55d7a1;
+  --nx-success-soft: #12301f;
+  --nx-warning: #f4c46a;
+  --nx-warning-soft: #33270e;
+  --nx-danger: #ff8793;
+  --nx-danger-soft: #3a1620;
+  --nx-line: #2a354a;
+  --nx-line-strong: #3c4a63;
+}
+
+/* Expose the tokens to Tailwind utilities (bg-canvas, text-ink-2, border-line, …) */
+@theme inline {
+  --color-canvas: var(--nx-canvas);
+  --color-surface: var(--nx-surface);
+  --color-surface-2: var(--nx-surface-2);
+  --color-ink: var(--nx-ink);
+  --color-ink-2: var(--nx-ink-2);
+  --color-ink-3: var(--nx-ink-3);
+  --color-accent: var(--nx-accent);
+  --color-accent-hover: var(--nx-accent-hover);
+  --color-accent-soft: var(--nx-accent-soft);
+  --color-accent-ink: var(--nx-accent-ink);
+  --color-info: var(--nx-info);
+  --color-info-soft: var(--nx-info-soft);
+  --color-success: var(--nx-success);
+  --color-success-soft: var(--nx-success-soft);
+  --color-warning: var(--nx-warning);
+  --color-warning-soft: var(--nx-warning-soft);
+  --color-danger: var(--nx-danger);
+  --color-danger-soft: var(--nx-danger-soft);
+  --color-line: var(--nx-line);
+  --color-line-strong: var(--nx-line-strong);
+
+  /* Spec type scale: exactly 12 / 14 / 16 / 20 / 24 / 32 px (§4.2) */
+  --text-xs: 0.75rem; /* 12 — captions, meta */
+  --text-sm: 0.875rem; /* 14 — body minimum "where feasible" */
+  --text-base: 1rem; /* 16 */
+  --text-lg: 1.25rem; /* 20 */
+  --text-xl: 1.5rem; /* 24 */
+  --text-2xl: 2rem; /* 32 */
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono",
+    Menlo, Consolas, monospace;
+
+  /* Spec radius: 6 compact controls, 10–12 cards, 16 modal (§4.2) */
+  --radius-control: 6px;
+  --radius-card: 12px;
+  --radius-modal: 16px;
+
+  /* Spec motion: 120–240ms subtle (§4.2) */
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+}
+
+/* Spacing uses Tailwind's default 4px grid; allowed steps 8/12/16/24/32/48
+   map to p-2, p-3, p-4, p-6, p-8, p-12. */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--nx-canvas);
+  color: var(--nx-ink);
+  font-family: var(--font-sans);
+  font-size: 0.875rem; /* 14px body minimum per spec */
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible focus, never obscured (WCAG 2.2 AA) */
+:focus-visible {
+  outline: 2px solid var(--nx-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion (spec: must respect prefers-reduced-motion) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Compact density for expert tables (UXD-015): toggled by adding
+   `density-compact` to <html>. Components read these vars. */
+:root {
+  --nx-row-y: 0.625rem; /* comfortable row padding */
+}
+.density-compact {
+  --nx-row-y: 0.25rem;
+}
+
+/* Thin, calm scrollbars for log/code panes */
+.nx-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.nx-scroll::-webkit-scrollbar-thumb {
+  background: var(--nx-line-strong);
+  border-radius: 8px;
+}
